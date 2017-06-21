@@ -21,10 +21,12 @@ from sphinx.locale import _
 from sphinx.environment import NoUri
 from sphinx.util.osutil import copyfile
 from sphinx.util.compat import Directive
-from sphinx.util.compat import make_admonition
 from sphinx.util.console import brown
 from sphinx.util.osutil import ensuredir
-
+try:
+    from sphinx.util.compat import make_admonition
+except ImportError:
+    from docutils.parsers.rst.directives.admonitions import BaseAdmonition as make_admonition
 from docutils import nodes, utils
 from docutils.parsers.rst import roles
 from docutils.parsers.rst import directives
@@ -333,7 +335,6 @@ def setup(app):
     app.connect('builder-inited', configure_backend)
     app.connect('env-updated', download_images)
     app.connect('env-updated', install_backend_static_files)
-    return {'version': sphinx.__version__, 'parallel_read_safe': True}
 
 
 def main(args=sys.argv[1:]):
